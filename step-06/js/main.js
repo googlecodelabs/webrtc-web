@@ -13,7 +13,7 @@
 
 var configuration = null;
 
-var roomURL = document.getElementById('url');
+// var roomURL = document.getElementById('url');
 var video = document.querySelector('video');
 var photo = document.getElementById('photo');
 var photoContext = photo.getContext('2d');
@@ -47,7 +47,7 @@ var socket = io.connect();
 
 socket.on('ipaddr', function(ipaddr) {
   console.log('Server IP address is: ' + ipaddr);
-  updateRoomURL(ipaddr);
+  // updateRoomURL(ipaddr);
 });
 
 socket.on('created', function(room, clientId) {
@@ -101,15 +101,15 @@ function sendMessage(message) {
 /**
 * Updates URL on the page so that users can copy&paste it to their peers.
 */
-function updateRoomURL(ipaddr) {
-  var url;
-  if (!ipaddr) {
-    url = location.href;
-  } else {
-    url = location.protocol + '//' + ipaddr + ':2013/#' + room;
-  }
-  roomURL.innerHTML = url;
-}
+// function updateRoomURL(ipaddr) {
+//   var url;
+//   if (!ipaddr) {
+//     url = location.href;
+//   } else {
+//     url = location.protocol + '//' + ipaddr + ':2013/#' + room;
+//   }
+//   roomURL.innerHTML = url;
+// }
 
 /****************************************************************************
 * User media (webcam)
@@ -135,7 +135,7 @@ function gotStream(stream) {
   video.onloadedmetadata = function() {
     photo.width = photoContextW = video.videoWidth;
     photo.height = photoContextH = video.videoHeight;
-    console.log('>>>>>> gotStream ', photoContextW, photoContextH);
+    console.log('gotStream with with and height:', photoContextW, photoContextH);
   };
   show(snapBtn);
 }
