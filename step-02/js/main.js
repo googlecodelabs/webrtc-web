@@ -126,16 +126,12 @@ function onCreateOfferSuccess(desc) {
   trace('Offer from pc1\n' + desc.sdp);
   trace('pc1 setLocalDescription start');
   pc1.setLocalDescription(desc).then(
-    function() {
-      onSetLocalSuccess(pc1);
-    },
+    onSetLocalSuccess(pc1),
     onSetSessionDescriptionError
   );
   trace('pc2 setRemoteDescription start');
   pc2.setRemoteDescription(desc).then(
-    function() {
-      onSetRemoteSuccess(pc2);
-    },
+    onSetRemoteSuccess(pc2),
     onSetSessionDescriptionError
   );
   trace('pc2 createAnswer start');
@@ -170,16 +166,12 @@ function onCreateAnswerSuccess(desc) {
   trace('Answer from pc2:\n' + desc.sdp);
   trace('pc2 setLocalDescription start');
   pc2.setLocalDescription(desc).then(
-    function() {
-      onSetLocalSuccess(pc2);
-    },
+    onSetLocalSuccess(pc2),
     onSetSessionDescriptionError
   );
   trace('pc1 setRemoteDescription start');
   pc1.setRemoteDescription(desc).then(
-    function() {
-      onSetRemoteSuccess(pc1);
-    },
+    onSetRemoteSuccess(pc1),
     onSetSessionDescriptionError
   );
 }
@@ -189,9 +181,7 @@ function onIceCandidate(pc, event) {
     getOtherPc(pc).addIceCandidate(
       new RTCIceCandidate(event.candidate)
     ).then(
-      function() {
-        onAddIceCandidateSuccess(pc);
-      },
+      onAddIceCandidateSuccess(pc),
       function(err) {
         onAddIceCandidateError(pc, err);
       }
