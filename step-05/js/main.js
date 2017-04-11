@@ -10,16 +10,14 @@ var turnReady;
 
 var pcConfig = {
   'iceServers': [{
-    'url': 'stun:stun.l.google.com:19302'
+    'urls': 'stun:stun.l.google.com:19302'
   }]
 };
 
 // Set up audio and video regardless of what devices are present.
 var sdpConstraints = {
-  'mandatory': {
-    'OfferToReceiveAudio': true,
-    'OfferToReceiveVideo': true
-  }
+  offerToReceiveAudio: true,
+  offerToReceiveVideo: true
 };
 
 /////////////////////////////////////////////
