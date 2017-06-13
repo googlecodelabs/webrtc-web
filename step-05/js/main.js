@@ -6,7 +6,6 @@ var isStarted = false;
 var localStream;
 var pc;
 var remoteStream;
-var turnReady;
 
 var pcConfig = {
   'iceServers': [{
@@ -212,7 +211,6 @@ function requestTurn(turnURL) {
   for (var i in pcConfig.iceServers) {
     if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
       turnExists = true;
-      turnReady = true;
       break;
     }
   }
@@ -228,7 +226,6 @@ function requestTurn(turnURL) {
           'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
           'credential': turnServer.password
         });
-        turnReady = true;
       }
     };
     xhr.open('GET', turnURL, true);
