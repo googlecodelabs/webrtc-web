@@ -260,8 +260,6 @@ function handleRemoteHangup() {
 
 function stop() {
   isStarted = false;
-  // isAudioMuted = false;
-  // isVideoMuted = false;
   pc.close();
   pc = null;
 }
