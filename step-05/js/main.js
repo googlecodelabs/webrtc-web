@@ -219,7 +219,7 @@ function requestTurn(turnURL) {
         var turnServer = JSON.parse(xhr.responseText);
         console.log('Got TURN server: ', turnServer);
         pcConfig.iceServers.push({
-          'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
+          'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
           'credential': turnServer.password
         });
         turnReady = true;
