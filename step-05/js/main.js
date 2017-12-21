@@ -10,16 +10,14 @@ var turnReady;
 
 var pcConfig = {
   'iceServers': [{
-    'url': 'stun:stun.l.google.com:19302'
+    'urls': 'stun:stun.l.google.com:19302'
   }]
 };
 
 // Set up audio and video regardless of what devices are present.
 var sdpConstraints = {
-  'mandatory': {
-    'OfferToReceiveAudio': true,
-    'OfferToReceiveVideo': true
-  }
+  offerToReceiveAudio: true,
+  offerToReceiveVideo: true
 };
 
 /////////////////////////////////////////////
@@ -174,12 +172,6 @@ function handleIceCandidate(event) {
   }
 }
 
-function handleRemoteStreamAdded(event) {
-  console.log('Remote stream added.');
-  remoteVideo.src = window.URL.createObjectURL(event.stream);
-  remoteStream = event.stream;
-}
-
 function handleCreateOfferError(event) {
   console.log('createOffer() error: ', event);
 }
@@ -212,7 +204,7 @@ function onCreateSessionDescriptionError(error) {
 function requestTurn(turnURL) {
   var turnExists = false;
   for (var i in pcConfig.iceServers) {
-    if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
+    if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
       turnExists = true;
       turnReady = true;
       break;
@@ -227,7 +219,7 @@ function requestTurn(turnURL) {
         var turnServer = JSON.parse(xhr.responseText);
         console.log('Got TURN server: ', turnServer);
         pcConfig.iceServers.push({
-          'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
+          'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
           'credential': turnServer.password
         });
         turnReady = true;
@@ -262,8 +254,6 @@ function handleRemoteHangup() {
 
 function stop() {
   isStarted = false;
-  // isAudioMuted = false;
-  // isVideoMuted = false;
   pc.close();
   pc = null;
 }
