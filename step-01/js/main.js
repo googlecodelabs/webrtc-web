@@ -17,11 +17,7 @@ const localVideo = document.querySelector('video');
 /** Handles success by adding the MediaStream to the video element. */
 const localMediaStreamSuccessCallback = (mediaStream) => {
   window.localStream = mediaStream;  // Makes stream available to the console.
-  if (window.URL) {
-    localVideo.src = window.URL.createObjectURL(mediaStream);
-  } else {
-    localVideo.src = mediaStream;
-  }
+  video.srcObject = mediaStream;
 };
 
 /** Handles error by logging a message to the console with the error message. */
