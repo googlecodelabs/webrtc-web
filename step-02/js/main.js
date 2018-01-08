@@ -30,9 +30,10 @@ let remotePeerConnection;
 
 // Handles success by adding the MediaStream to the video element.
 const gotLocalMediaStream = (mediaStream) => {
-  localVideo.srcObj = mediaStream;
-  callButton.disabled = false;  // Enable call button.
+  localVideo.srcObj = localStream;
+  localStream = mediaStream;
   trace('Received local stream.');
+  callButton.disabled = false;  // Enable call button.
 };
 
 // Handles error by logging a message to the console with the error message.
@@ -43,7 +44,8 @@ const localMediaStreamError = (error) => {
 // Handles remote MediaSteam success by...
 const gotRemoteMediaStream = (event) => {
   const mediaStream = event.stream;
-  addStreamToVideo(remoteVideo, mediaStream);
+  remoteVideo.srcObj = mediaStream;
+  remoteStream = mediaStream;
   trace('Remote peer connection received remote stream.');
 };
 
@@ -254,11 +256,6 @@ hangupButton.addEventListener('click', hangupAction);
 
 
 // Define helper functions.
-
-// Adds media stream URL to a given video element.
-const addStreamToVideo = (video, mediaStream) => {
-  video.srcObj = mediaStream;
-};
 
 // Gets the opposite peer connection.
 const getOtherPeer = (peerConnection) => {
