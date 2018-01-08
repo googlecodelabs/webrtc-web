@@ -91,7 +91,7 @@ const connectionHandler = (event) => {
       .then(() => { connectionSucceeded(peerConnection); })
       .catch((error) => { connectionFailed(peerConnection, error); });
 
-    trace(`${getPeerName(peerConnection)} ICE candidate: ` +
+    trace(`${getPeerName(peerConnection)} ICE candidate:\n` +
           `${event.candidate.candidate}.`);
   }
 };
@@ -103,7 +103,7 @@ const connectionSucceeded = (peerConnection) => {
 
 // Logs that the connection failed.
 const connectionFailed = (peerConnection, error) => {
-  trace(`${getPeerName(peerConnection)} failed to add ICE Candidate: `+
+  trace(`${getPeerName(peerConnection)} failed to add ICE Candidate:\n`+
         `${error.toString()}.`);
 }
 
@@ -138,7 +138,7 @@ const setRemoteDescriptionSuccess = (peerConnection) => {
 
 // Logs offer creation and sets peer connection session descriptions.
 const offerCreated = (description) => {
-  trace(`Offer from localPeerConnection: ${description.sdp}`);
+  trace(`Offer from localPeerConnection:\n${description.sdp}`);
 
   trace('localPeerConnection setLocalDescription start.');
   localPeerConnection.setLocalDescription(description)
@@ -159,7 +159,7 @@ const offerCreated = (description) => {
 // Logs answer to offer creation and sets peer connection session descriptions.
 // Complementary function of offerCreated.
 const answerCreated = (description) => {
-  trace(`Answer from remotePeerConnection: ${description.sdp}.`);
+  trace(`Answer from remotePeerConnection:\n${description.sdp}.`);
 
   trace('remotePeerConnection setLocalDescription start.');
   remotePeerConnection.setLocalDescription(description)
