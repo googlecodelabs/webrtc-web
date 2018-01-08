@@ -30,7 +30,7 @@ let remotePeerConnection;
 
 // Handles success by adding the MediaStream to the video element.
 const gotLocalMediaStream = (mediaStream) => {
-  localVideo.srcObject = localStream;
+  localVideo.srcObject = mediaStream;
   localStream = mediaStream;
   trace('Received local stream.');
   callButton.disabled = false;  // Enable call button.
