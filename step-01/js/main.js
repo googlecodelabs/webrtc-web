@@ -4,7 +4,7 @@
 
 /**
  * Constraints to apply to MediaStream.
- * On this codelab, we will be streaming video, but not audio.
+ * On this codelab, you will be streaming video, but not audio.
  */
 const mediaStreamConstraints = {
   audio: false,
