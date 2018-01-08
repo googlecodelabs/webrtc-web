@@ -31,4 +31,5 @@ const localMediaStreamErrorCallback = (error) => {
 
 // Initializes media stream.
 navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-  .then(localMediaStreamSuccessCallback, localMediaStreamErrorCallback);
+  .then(localMediaStreamSuccessCallback)
+  .catch(localMediaStreamErrorCallback);
