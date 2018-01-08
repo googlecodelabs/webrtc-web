@@ -13,7 +13,7 @@ const localVideo = document.querySelector('video');
 
 /** Handles success by adding the MediaStream to the video element. */
 const gotLocalMediaStream = (mediaStream) => {
-  video.srcObject = mediaStream;
+  localVideo.srcObject = mediaStream;
 };
 
 /** Handles error by logging a message to the console with the error message. */
