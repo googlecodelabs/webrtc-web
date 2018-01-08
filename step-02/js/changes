@@ -1,6 +1,0 @@
-- Rewrite in ES6 style.
-- Remove deprecated methods.
-- Add JSDoc, and some additional comments.
-- Rename some constant and function names to match step-01 and reduce learning curve.
-- Rename some constant and function names to make them more specific and understandable.
-- Combine logic of video loadedMetadata into one single function.
