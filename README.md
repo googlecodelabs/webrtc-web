@@ -18,4 +18,9 @@ This is a work in progress. If you find a mistake or have a suggestion, please [
 * Web Server for Chrome, or use your own web server of choice.
 * The sample code.
 * A text editor.
-* Basic knowledge of HTML, CSS and JavaScript.
+* Basic knowledge of HTML, CSS and JavaScript, Node.JS.
+
+
+## For 'step-04', 'step-05', 'step-06'
+
+Run `npm install` before running the code.
