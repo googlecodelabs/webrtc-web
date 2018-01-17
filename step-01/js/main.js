@@ -14,10 +14,10 @@ const gotLocalMediaStream = function(mediaStream) {
 };
 
 // Handles error by logging a message to the console with the error message.
-const localMediaStreamError = function(error) {
+const handleLocalMediaStreamError = function(error) {
   console.log('navigator.getUserMedia error: ', error);
 };
 
 // Initializes media stream.
 navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-  .then(gotLocalMediaStream).catch(localMediaStreamError);
+  .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
