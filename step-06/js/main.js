@@ -127,10 +127,9 @@ function grabWebCamVideo() {
 }
 
 function gotStream(stream) {
-  var streamURL = window.URL.createObjectURL(stream);
   console.log('getUserMedia video stream URL:', streamURL);
   window.stream = stream; // stream available to console
-  video.src = streamURL;
+  video.srcObject = stream;
   video.onloadedmetadata = function() {
     photo.width = photoContextW = video.videoWidth;
     photo.height = photoContextH = video.videoHeight;

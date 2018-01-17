@@ -104,7 +104,7 @@ navigator.mediaDevices.getUserMedia({
 
 function gotStream(stream) {
   console.log('Adding local stream.');
-  localVideo.src = window.URL.createObjectURL(stream);
+  localVideo.srcObject = stream;
   localStream = stream;
   sendMessage('got user media');
   if (isInitiator) {
@@ -174,8 +174,8 @@ function handleIceCandidate(event) {
 
 function handleRemoteStreamAdded(event) {
   console.log('Remote stream added.');
-  remoteVideo.src = window.URL.createObjectURL(event.stream);
   remoteStream = event.stream;
+  remoteVideo.srcObject = remoteStream;
 }
 
 function handleCreateOfferError(event) {
@@ -238,8 +238,8 @@ function requestTurn(turnURL) {
 
 function handleRemoteStreamAdded(event) {
   console.log('Remote stream added.');
-  remoteVideo.src = window.URL.createObjectURL(event.stream);
   remoteStream = event.stream;
+  remoteVideo.srcObject = remoteStream;
 }
 
 function handleRemoteStreamRemoved(event) {
