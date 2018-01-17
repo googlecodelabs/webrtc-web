@@ -9,12 +9,12 @@ const mediaStreamConstraints = {
 const localVideo = document.querySelector('video');
 
 // Handles success by adding the MediaStream to the video element.
-const gotLocalMediaStream = (mediaStream) => {
+const gotLocalMediaStream = function(mediaStream) => {
   localVideo.srcObject = mediaStream;
 };
 
 // Handles error by logging a message to the console with the error message.
-const localMediaStreamError = (error) => {
+const localMediaStreamError = function(error) => {
   console.log('navigator.getUserMedia error: ', error);
 };
 
