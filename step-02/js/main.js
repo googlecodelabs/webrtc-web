@@ -2,7 +2,8 @@
 
 // Set up media stream constant and parameters.
 
-// On this codelab, you will be streaming video only (video: true).
+// In this codelab, you will be streaming video only: "video: true".
+// Audio will not be streamed because it is set to "audio: false" by default.
 const mediaStreamConstraints = {
   video: true,
 };
@@ -12,7 +13,7 @@ const offerOptions = {
   offerToReceiveVideo: 1,
 };
 
-// Defines initial start time of the call (defined as connection between peers).
+// Define initial start time of the call (defined as connection between peers).
 let startTime = null;
 
 // Define peer connections, streams and video elements.
@@ -28,21 +29,21 @@ let remotePeerConnection;
 
 // Define MediaStreams callbacks.
 
-// Handles success by adding the MediaStream to the video element.
-const gotLocalMediaStream = (mediaStream) => {
+// Set the MediaStream as the video element src.
+const gotLocalMediaStream = function(mediaStream) {
   localVideo.srcObject = mediaStream;
   localStream = mediaStream;
   trace('Received local stream.');
   callButton.disabled = false;  // Enable call button.
 };
 
-// Handles error by logging a message to the console with the error message.
-const localMediaStreamError = (error) => {
+// Handle error by logging a message to the console.
+const handleLocalMediaStreamError = function(error) {
   trace(`navigator.getUserMedia error: ${error.toString()}.`);
 };
 
-// Handles remote MediaSteam success by...
-const gotRemoteMediaStream = (event) => {
+// Handle remote MediaStream success by adding it as the remoteVideo src.
+const gotRemoteMediaStream = function(event) {
   const mediaStream = event.stream;
   remoteVideo.srcObject = mediaStream;
   remoteStream = mediaStream;
@@ -53,18 +54,19 @@ const gotRemoteMediaStream = (event) => {
 // Add behavior for video streams.
 
 // Logs a message with the id and size of a video element.
-const logVideoLoaded = (event) => {
+const logVideoLoaded = function(event) {
   const video = event.target;
   trace(`${video.id} videoWidth: ${video.videoWidth}px, ` +
         `videoHeight: ${video.videoHeight}px.`);
 };
 
-// Logs a message with the id and size of a video element.
-const logResizedVideo = (event) => {
-  logVideoLoaded(event);  // Log size of video by calling logVideoLoaded.
+// Log a message with the id and size of a video element.
+// This function is added as a handler for the video resize event.
+// This event is fired when video begins streaming.
+const logResizedVideo = function(event) {
+  logVideoLoaded(event);
 
-  // First on-resize is used as an indication that video started playing out.
-  if (startTime) {  // If startTime is defined is first load.
+  if (startTime) {
     const elapsedTime = window.performance.now() - startTime;
     startTime = null;
     trace(`Setup time: ${elapsedTime.toFixed(3)}ms.`);
@@ -78,8 +80,8 @@ remoteVideo.addEventListener('onresize', logResizedVideo);
 
 // Define RTC peer connection behavior.
 
-// Connects with new peer candidate.
-const connectionHandler = (event) => {
+// Connect with new peer candidate.
+const handleConnection = function(event) {
   const peerConnection = event.target;
   const iceCandidate = event.candidate;
 
@@ -88,88 +90,95 @@ const connectionHandler = (event) => {
     const otherPeer = getOtherPeer(peerConnection);
 
     otherPeer.addIceCandidate(newIceCandidate)
-      .then(() => { connectionSucceeded(peerConnection); })
-      .catch((error) => { connectionFailed(peerConnection, error); });
+      .then(() => {
+        handleConnectionSuccess(peerConnection);
+      }).catch((error) => {
+        handleConnectionFailure(peerConnection, error);
+      });
 
     trace(`${getPeerName(peerConnection)} ICE candidate:\n` +
           `${event.candidate.candidate}.`);
   }
 };
 
-// Logs that the connection succeeded.
-const connectionSucceeded = (peerConnection) => {
+// Log that the connection succeeded.
+const handleConnectionSuccess = function(peerConnection) {
   trace(`${getPeerName(peerConnection)} addIceCandidate success.`);
 };
 
-// Logs that the connection failed.
-const connectionFailed = (peerConnection, error) => {
+// Log that the connection failed.
+const handleConnectionFailure = function(peerConnection, error) {
   trace(`${getPeerName(peerConnection)} failed to add ICE Candidate:\n`+
         `${error.toString()}.`);
 }
 
-// Logs changes to the connection state.
-const connectionChanged = (event) => {
+// Log changes to the connection state.
+const handleConnectionChange = function(event) {
   const peerConnection = event.target;
   console.log('ICE state change event: ', event);
   trace(`${getPeerName(peerConnection)} ICE state: ` +
         `${peerConnection.iceConnectionState}.`);
 };
 
-// Logs error when setting session description fails.
-const setSessionDescriptionError = (error) => {
+// Log error when setting session description fails.
+const setSessionDescriptionError = function(error) {
   trace(`Failed to create session description: ${error.toString()}.`);
 };
 
-// Logs success when setting session description.
-const setDescriptionSuccess = (peerConnection, functionName) => {
+// Log success when setting session description.
+const setDescriptionSuccess = function(peerConnection, functionName) {
   const peerName = getPeerName(peerConnection);
   trace(`${peerName} ${functionName} complete.`);
 }
 
-// Short-hand for setDescriptionSuccess when using setLocalDescription.
-const setLocalDescriptionSuccess = (peerConnection) => {
+// Called when the localDescription is set successfully.
+const setLocalDescriptionSuccess = function(peerConnection) {
   setDescriptionSuccess(peerConnection, 'setLocalDescription');
 }
 
-// Short-hand for setDescriptionSuccess when using setLocalDescription.
-const setRemoteDescriptionSuccess = (peerConnection) => {
+// Called when the remoteDescription is set successfully.
+const setRemoteDescriptionSuccess = function(peerConnection) {
   setDescriptionSuccess(peerConnection, 'setRemoteDescription');
 }
 
-// Logs offer creation and sets peer connection session descriptions.
-const offerCreated = (description) => {
+// Log offer creation and sets peer connection session descriptions.
+const createdOffer = function(description) {
   trace(`Offer from localPeerConnection:\n${description.sdp}`);
 
   trace('localPeerConnection setLocalDescription start.');
   localPeerConnection.setLocalDescription(description)
-    .then(() => { setLocalDescriptionSuccess(localPeerConnection); })
-    .catch(setSessionDescriptionError);
+    .then(() => {
+      setLocalDescriptionSuccess(localPeerConnection);
+    }).catch(setSessionDescriptionError);
 
   trace('remotePeerConnection setRemoteDescription start.');
   remotePeerConnection.setRemoteDescription(description)
-    .then(() => { setRemoteDescriptionSuccess(remotePeerConnection); })
-    .catch(setSessionDescriptionError);
+    .then(() => {
+      setRemoteDescriptionSuccess(remotePeerConnection);
+    }).catch(setSessionDescriptionError);
 
   trace('remotePeerConnection createAnswer start.');
   remotePeerConnection.createAnswer()
-    .then(answerCreated)
+    .then(createdAnswer)
     .catch(setSessionDescriptionError);
 };
 
-// Logs answer to offer creation and sets peer connection session descriptions.
-// Complementary function of offerCreated.
-const answerCreated = (description) => {
+// Log answer to offer creation and sets peer connection session descriptions.
+// Complementary function of createdOffer.
+const createdAnswer = function(description) {
   trace(`Answer from remotePeerConnection:\n${description.sdp}.`);
 
   trace('remotePeerConnection setLocalDescription start.');
   remotePeerConnection.setLocalDescription(description)
-    .then(() => { setLocalDescriptionSuccess(remotePeerConnection); })
-    .catch(setSessionDescriptionError);
+    .then(() => {
+      setLocalDescriptionSuccess(remotePeerConnection);
+    }).catch(setSessionDescriptionError);
 
   trace('localPeerConnection setRemoteDescription start.');
   localPeerConnection.setRemoteDescription(description)
-    .then(() => { setRemoteDescriptionSuccess(localPeerConnection); })
-    .catch(setSessionDescriptionError);
+    .then(() => {
+      setRemoteDescriptionSuccess(localPeerConnection);
+    }).catch(setSessionDescriptionError);
 };
 
 
@@ -185,16 +194,16 @@ callButton.disabled = true;
 hangupButton.disabled = true;
 
 
-// Handles start button action: creates local MediaStream.
-const startAction = () => {
+// Handle start button action: creates local MediaStream.
+const startAction = function() {
   startButton.disabled = true;
   navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-    .then(gotLocalMediaStream).catch(localMediaStreamError);
+    .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
   trace('Requesting local stream.');
 };
 
-// Handles call button action: creates peer connection.
-const callAction = () => {
+// Handle call button action: creates peer connection.
+const callAction = function() {
   callButton.disabled = true;
   hangupButton.disabled = false;
 
@@ -217,16 +226,16 @@ const callAction = () => {
   localPeerConnection = new RTCPeerConnection(servers);
   trace('Created local peer connection object localPeerConnection.');
 
-  localPeerConnection.addEventListener('icecandidate', connectionHandler);
+  localPeerConnection.addEventListener('icecandidate', handleConnection);
   localPeerConnection.addEventListener(
-    'iceconnectionstatechange', connectionChanged);
+    'iceconnectionstatechange', handleConnectionChange);
 
   remotePeerConnection = new RTCPeerConnection(servers);
   trace('Created remote peer connection object remotePeerConnection.');
 
-  remotePeerConnection.addEventListener('icecandidate', connectionHandler);
+  remotePeerConnection.addEventListener('icecandidate', handleConnection);
   remotePeerConnection.addEventListener(
-    'iceconnectionstatechange', connectionChanged);
+    'iceconnectionstatechange', handleConnectionChange);
   remotePeerConnection.addEventListener('addstream', gotRemoteMediaStream);
 
   // Add local stream to connection and create offer to connect.
@@ -235,11 +244,11 @@ const callAction = () => {
 
   trace('localPeerConnection createOffer start.');
   localPeerConnection.createOffer(offerOptions)
-    .then(offerCreated).catch(setSessionDescriptionError);
+    .then(createdOffer).catch(setSessionDescriptionError);
 };
 
 // End up call by closing connections and resetting peers.
-const hangupAction = () => {
+const hangupAction = function() {
   localPeerConnection.close();
   remotePeerConnection.close();
   localPeerConnection = null;
@@ -249,7 +258,7 @@ const hangupAction = () => {
   trace('Ending call.');
 };
 
-// Add functionality to buttons.
+// Add click event handlers for buttons.
 startButton.addEventListener('click', startAction);
 callButton.addEventListener('click', callAction);
 hangupButton.addEventListener('click', hangupAction);
@@ -257,19 +266,19 @@ hangupButton.addEventListener('click', hangupAction);
 
 // Define helper functions.
 
-// Gets the opposite peer connection.
-const getOtherPeer = (peerConnection) => {
+// Get the "other" peer connection.
+const getOtherPeer = function(peerConnection) {
   return (peerConnection === localPeerConnection) ?
       remotePeerConnection : localPeerConnection;
 };
 
-// Gets the name of a certain peer connection.
-const getPeerName = (peerConnection) => {
+// Get the name of a certain peer connection.
+const getPeerName = function(peerConnection) {
   return (peerConnection === localPeerConnection) ?
       'localPeerConnection' : 'remotePeerConnection';
 };
 
-// Logs an action (text) and the time when it happened on the console.
+// Log an action (text) and the time when it happened on the console.
 const trace = (text) => {
   text = text.trim();
   const now = (window.performance.now() / 1000).toFixed(3);
