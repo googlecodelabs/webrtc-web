@@ -134,7 +134,7 @@ function gotStream(stream) {
   video.onloadedmetadata = function() {
     photo.width = photoContextW = video.videoWidth;
     photo.height = photoContextH = video.videoHeight;
-    console.log('gotStream with with and height:', photoContextW, photoContextH);
+    console.log('gotStream with width and height:', photoContextW, photoContextH);
   };
   show(snapBtn);
 }
