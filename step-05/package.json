@@ -4,5 +4,5 @@
   "description": "WebRTC codelab",
   "dependencies": {
     "node-static": "0.7.7",
-    "socket.io": "1.2.0"
+    "socket.io": "^2.0.4"
   }}
