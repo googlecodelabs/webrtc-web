@@ -127,14 +127,13 @@ function grabWebCamVideo() {
 }
 
 function gotStream(stream) {
-  var streamURL = window.URL.createObjectURL(stream);
   console.log('getUserMedia video stream URL:', streamURL);
   window.stream = stream; // stream available to console
-  video.src = streamURL;
+  video.srcObject = stream;
   video.onloadedmetadata = function() {
     photo.width = photoContextW = video.videoWidth;
     photo.height = photoContextH = video.videoHeight;
-    console.log('gotStream with with and height:', photoContextW, photoContextH);
+    console.log('gotStream with width and height:', photoContextW, photoContextH);
   };
   show(snapBtn);
 }

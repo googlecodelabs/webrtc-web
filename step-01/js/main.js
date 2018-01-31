@@ -1,26 +1,23 @@
 'use strict';
 
-navigator.getUserMedia = navigator.getUserMedia ||
-    navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-var constraints = {
-  audio: false,
-  video: true
+// On this codelab, you will be streaming only video (video: true).
+const mediaStreamConstraints = {
+  video: true,
 };
 
-var video = document.querySelector('video');
+// Video element where stream will be placed.
+const localVideo = document.querySelector('video');
 
-function successCallback(stream) {
-  window.stream = stream; // stream available to console
-  if (window.URL) {
-    video.src = window.URL.createObjectURL(stream);
-  } else {
-    video.src = stream;
-  }
+// Handles success by adding the MediaStream to the video element.
+function gotLocalMediaStream(mediaStream) {
+  localVideo.srcObject = mediaStream;
 }
 
-function errorCallback(error) {
+// Handles error by logging a message to the console with the error message.
+function handleLocalMediaStreamError(error) {
   console.log('navigator.getUserMedia error: ', error);
 }
 
-navigator.getUserMedia(constraints, successCallback, errorCallback);
+// Initializes media stream.
+navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+  .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
