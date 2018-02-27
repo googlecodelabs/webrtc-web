@@ -60,8 +60,15 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  socket.on('bye', function(){
-    console.log('received bye');
+  socket.on('disconnect', function(room) {
+    // for a real app, would be room-only (not broadcast)
+    // io.sockets.in(room).emit('bye', room);
+    console.log('leaving room', room);
+    socket.broadcast.emit('bye', room);
+  });
+
+  socket.on('bye', function(room){
+    console.log('received bye', room);
   });
 
 });
