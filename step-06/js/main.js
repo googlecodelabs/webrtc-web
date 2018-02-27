@@ -89,6 +89,18 @@ if (location.hostname.match(/localhost|127\.0\.0/)) {
   socket.emit('ipaddr');
 }
 
+socket.on('bye', function(leftRoom) {
+  console.log('Peer left room. Refreshing to re-create room.', leftRoom);
+  if (room !== leftRoom) return;
+  dataChannel.readyState = 'closed';
+  window.location.reload();
+})
+
+window.addEventListener('unload', function() {
+  console.log('Leaving room ' + room);
+  socket.emit('disconnect', room);
+});
+
 /**
 * Send message to signaling server
 */
@@ -127,7 +139,7 @@ function grabWebCamVideo() {
 }
 
 function gotStream(stream) {
-  console.log('getUserMedia video stream URL:', streamURL);
+  console.log('getUserMedia video stream URL:', stream);
   window.stream = stream; // stream available to console
   video.srcObject = stream;
   video.onloadedmetadata = function() {
@@ -303,7 +315,18 @@ var img = photoContext.getImageData(0, 0, photoContextW, photoContextH),
 len = img.data.byteLength,
 n = len / CHUNK_LEN | 0;
 
+console.log('status of dataChannel', dataChannel); // REMOVE
 console.log('Sending a total of ' + len + ' byte(s)');
+
+if (!dataChannel) {
+  logError('Connection has not been initiated. ' +
+    'Get two peers in the same room first');
+  return;
+} else if (dataChannel.readyState === 'closed') {
+  logError('Connection was lost. Peer closed the connection.');
+  return;
+}
+
 dataChannel.send(len);
 
 // split the photo and send in chunks of about 64KB
@@ -357,5 +380,9 @@ function randomToken() {
 }
 
 function logError(err) {
-  console.log(err.toString(), err);
+  if (typeof err === 'string') {
+    console.warn(err);
+  } else {
+    console.warn(err.toString(), err);
+  }
 }
