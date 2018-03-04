@@ -89,17 +89,11 @@ if (location.hostname.match(/localhost|127\.0\.0/)) {
   socket.emit('ipaddr');
 }
 
-socket.on('bye', function(leftRoom) {
-  console.log('Peer left room. Refreshing to re-create room.', leftRoom);
-  if (room !== leftRoom) return;
-  dataChannel.readyState = 'closed';
+socket.on('disconnect', function(reason) {
+  console.log(`Disconnected: ${reason}. Refreshing to re-create room.`);
+  if (dataChannel.readyState) { dataChannel.readyState = 'closed'; }
   window.location.reload();
 })
-
-window.addEventListener('unload', function() {
-  console.log('Leaving room ' + room);
-  socket.emit('disconnect', room);
-});
 
 /**
 * Send message to signaling server
@@ -174,9 +168,7 @@ function signalingMessageCallback(message) {
       candidate: message.candidate
     }));
 
-  } else if (message === 'bye') {
-// TODO: cleanup RTC connection?
-}
+  }
 }
 
 function createPeerConnection(isInitiator, config) {
