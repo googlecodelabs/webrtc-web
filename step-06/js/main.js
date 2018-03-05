@@ -91,7 +91,23 @@ if (location.hostname.match(/localhost|127\.0\.0/)) {
 
 socket.on('disconnect', function(reason) {
   console.log(`Disconnected: ${reason}. Refreshing to re-create room.`);
-  if (dataChannel.readyState) { dataChannel.readyState = 'closed'; }
+  window.location.reload();
+})
+
+
+function leaveRoom() {
+  console.log(`Unloading window. Notifying peers in ${room}.`);
+  socket.emit('bye', room);
+}
+
+window.addEventListener('unload', leaveRoom);
+
+socket.on('bye', function(room) {
+  console.log(`Peer leaving room ${room}. Refreshing to re-create room.`);
+  // TODO(nitobuendia): check if peer re-connected immediately.
+  //   Otherwise, we reach infinite loops of re-connexion until one is slow.
+  // Avoid duplicated message when re-creating room because other peer left.
+  window.removeEventListener('unload', leaveRoom);
   window.location.reload();
 })
 
