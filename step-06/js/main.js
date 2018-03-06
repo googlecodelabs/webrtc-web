@@ -82,13 +82,14 @@ socket.on('message', function(message) {
   signalingMessageCallback(message);
 });
 
-// Join a room
+// Joining a room.
 socket.emit('create or join', room);
 
 if (location.hostname.match(/localhost|127\.0\.0/)) {
   socket.emit('ipaddr');
 }
 
+// Leaving rooms and disconnecting from peers.
 socket.on('disconnect', function(reason) {
   console.log(`Disconnected: ${reason}. Refreshing to re-create room.`);
   window.location.reload();
