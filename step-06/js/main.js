@@ -98,15 +98,7 @@ socket.on('disconnect', function(reason) {
   console.log(`Disconnected: ${reason}.`);
   sendBtn.disabled = true;
   snapAndSendBtn.disabled = true;
-})
-
-
-function leaveRoom() {
-  console.log(`Unloading window. Notifying peers in ${room}.`);
-  socket.emit('bye', room);
-}
-
-window.addEventListener('unload', leaveRoom);
+});
 
 socket.on('bye', function(room) {
   console.log(`Peer leaving room ${room}.`);
@@ -116,7 +108,13 @@ socket.on('bye', function(room) {
   if (!isInitiator) {
     window.location.reload();
   }
-})
+});
+
+window.addEventListener('unload', function() {
+  console.log(`Unloading window. Notifying peers in ${room}.`);
+  socket.emit('bye', room);
+});
+
 
 /**
 * Send message to signaling server
