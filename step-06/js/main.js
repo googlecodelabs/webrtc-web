@@ -336,7 +336,6 @@ var img = photoContext.getImageData(0, 0, photoContextW, photoContextH),
 len = img.data.byteLength,
 n = len / CHUNK_LEN | 0;
 
-console.log('status of dataChannel', dataChannel); // REMOVE
 console.log('Sending a total of ' + len + ' byte(s)');
 
 if (!dataChannel) {
