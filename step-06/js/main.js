@@ -403,6 +403,7 @@ function randomToken() {
 }
 
 function logError(err) {
+  if (!err) return;
   if (typeof err === 'string') {
     console.warn(err);
   } else {
