@@ -29,6 +29,10 @@ snapBtn.addEventListener('click', snapPhoto);
 sendBtn.addEventListener('click', sendPhoto);
 snapAndSendBtn.addEventListener('click', snapAndSend);
 
+// Disable send buttons by default.
+sendBtn.disabled = true;
+snapAndSendBtn.disabled = true;
+
 // Create a random room if not already present in the URL.
 var isInitiator;
 var room = window.location.hash.substring(1);
@@ -91,8 +95,9 @@ if (location.hostname.match(/localhost|127\.0\.0/)) {
 
 // Leaving rooms and disconnecting from peers.
 socket.on('disconnect', function(reason) {
-  console.log(`Disconnected: ${reason}. Refreshing to re-create room.`);
-  window.location.reload();
+  console.log(`Disconnected: ${reason}.`);
+  sendBtn.disabled = true;
+  snapAndSendBtn.disabled = true;
 })
 
 
@@ -104,12 +109,13 @@ function leaveRoom() {
 window.addEventListener('unload', leaveRoom);
 
 socket.on('bye', function(room) {
-  console.log(`Peer leaving room ${room}. Refreshing to re-create room.`);
-  // TODO(nitobuendia): check if peer re-connected immediately.
-  //   Otherwise, we reach infinite loops of re-connexion until one is slow.
-  // Avoid duplicated message when re-creating room because other peer left.
-  window.removeEventListener('unload', leaveRoom);
-  window.location.reload();
+  console.log(`Peer leaving room ${room}.`);
+  sendBtn.disabled = true;
+  snapAndSendBtn.disabled = true;
+  // If peer did not create the room, re-enter to be creator.
+  if (!isInitiator) {
+    window.location.reload();
+  }
 })
 
 /**
@@ -237,7 +243,15 @@ function onDataChannelCreated(channel) {
 
   channel.onopen = function() {
     console.log('CHANNEL opened!!!');
+    sendBtn.disabled = false;
+    snapAndSendBtn.disabled = false;
   };
+
+  channel.onclose = function () {
+    console.log('Channel closed.');
+    sendBtn.disabled = true;
+    snapAndSendBtn.disabled = true;
+  }
 
   channel.onmessage = (adapter.browserDetails.browser === 'firefox') ?
   receiveDataFirefoxFactory() : receiveDataChromeFactory();
