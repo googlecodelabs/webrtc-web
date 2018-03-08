@@ -127,7 +127,7 @@ function grabWebCamVideo() {
 }
 
 function gotStream(stream) {
-  console.log('getUserMedia video stream URL:', streamURL);
+  console.log('getUserMedia video stream URL:', stream);
   window.stream = stream; // stream available to console
   video.srcObject = stream;
   video.onloadedmetadata = function() {
