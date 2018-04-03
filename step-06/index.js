@@ -60,8 +60,12 @@ io.sockets.on('connection', function(socket) {
     }
   });
 
-  socket.on('bye', function(){
-    console.log('received bye');
+  socket.on('disconnect', function(reason) {
+    console.log(`Peer or server disconnected. Reason: ${reason}.`);
+    socket.broadcast.emit('bye');
   });
 
+  socket.on('bye', function(room) {
+    console.log(`Peer said bye on room ${room}.`);
+  });
 });
