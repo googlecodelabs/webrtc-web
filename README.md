@@ -32,15 +32,15 @@ Yes. While this Codelab is built using Node.js in order to [enable signaling](ht
 
 There are several repositories on GitHub built in [PHP](https://github.com/search?l=php&q=webrtc&type=Repositories) or [Python](https://github.com/search?l=Python&q=webrtc&type=Repositories) that can help you get started.
 
-### Can I use WebRTC in a server?
-Yes. WebRTC is a web API which is intended to be used in a real server. However, note that in order for WebRTC to work, you will need to serve over HTTPs and have your own [signaling system](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/).
+### Can I run a WebRTC app from a remote server?
+Yes. WebRTC is a web API which is intended to be used in a real server. However, note that in order for WebRTC to work, you will need to serve over HTTPS and have your own [signaling system](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/).
 
 ### Can this codelab be hosted on a server?
 The objective of this codelab is to show and teach how WebRTC works. As a result, the code is not thought or intended to be directly hosted in a server or production environment.
 
 However, you can use the base code to get you started. From there, you would need to get at least the [following relevant changes](https://github.com/googlecodelabs/webrtc-web/issues/70):
 
-1. Migrate from HTTP to HTTPs. [Read more](https://github.com/googlecodelabs/webrtc-web/issues/48).
+1. Migrate from HTTP to HTTPS. [Read more](https://github.com/googlecodelabs/webrtc-web/issues/48).
 1. Enabling [signaling using STUN and TURN servers](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/) to ensure peers can connect using your service.
 1. Rewriting some of the signaling code to ensure that communication only happens across the right peers instead of broadcasting to all connected peers.
 
