@@ -45,7 +45,9 @@ However, you can use the base code to get you started. From there, you would nee
 1. Rewriting some of the signaling code to ensure that communication only happens across the right peers instead of broadcasting to all connected peers.
 
 ### Can we have more than two peers connected using WebRTC?
-Yes. The codelab is limitting to two peers per room; but WebRTC can handle multiple connections. [Read more](https://github.com/googlecodelabs/webrtc-web/issues/72).
+Yes. The codelab is limitting to two peers per room; but WebRTC can handle multiple connections.  You can see a [live demo](https://webrtc.github.io/samples/src/content/peerconnection/multiple/) on the WebRTC samples ([code](https://github.com/webrtc/samples/tree/gh-pages/src/content/peerconnection/multiple)).
+
+If you are trying to modify the codelab to support multiple peers per room, you can read the instructions on [this issue](https://github.com/googlecodelabs/webrtc-web/issues/72).
 
 ### Is WebRTC only used for video conferencing?
 No, WebRTC can be used for all sorts of Real-Time Communications; including messages or files. You can see more applications on the [WebRTC samples](https://github.com/webrtc/samples).
