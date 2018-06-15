@@ -62,7 +62,6 @@ socket.on('created', function(room, clientId) {
 socket.on('joined', function(room, clientId) {
   console.log('This peer has joined room', room, 'with client ID', clientId);
   isInitiator = false;
-  createPeerConnection(isInitiator, configuration);
   grabWebCamVideo();
 });
 
