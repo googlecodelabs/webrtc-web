@@ -186,8 +186,10 @@ function signalingMessageCallback(message) {
 
   } else if (message.type === 'candidate') {
     peerConn.addIceCandidate(new RTCIceCandidate({
+      sdpMLineIndex: message.label,
+      sdpMid: message.id,
       candidate: message.candidate
-    }));
+    }));// Firefox compatible
 
   }
 }
