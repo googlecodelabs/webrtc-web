@@ -79,8 +79,9 @@ socket.on('message', function(message) {
     pc.setRemoteDescription(new RTCSessionDescription(message));
   } else if (message.type === 'candidate' && isStarted) {
     var candidate = new RTCIceCandidate({
+      candidate: message.candidate,
+      sdpMid: message.id,
       sdpMLineIndex: message.label,
-      candidate: message.candidate
     });
     pc.addIceCandidate(candidate);
   } else if (message === 'bye' && isStarted) {
