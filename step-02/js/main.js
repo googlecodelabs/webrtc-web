@@ -214,8 +214,14 @@ function callAction() {
   if (videoTracks.length > 0) {
     trace(`Using video device: ${videoTracks[0].label}.`);
   }
+  else{
+    trace('Not using video device.');
+  }
   if (audioTracks.length > 0) {
     trace(`Using audio device: ${audioTracks[0].label}.`);
+  }
+  else{
+    trace('Not using audio device.');
   }
 
   const servers = null;  // Allows for RTC server configuration.
