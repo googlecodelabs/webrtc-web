@@ -186,9 +186,11 @@ function signalingMessageCallback(message) {
 
   } else if (message.type === 'candidate') {
     peerConn.addIceCandidate(new RTCIceCandidate({
-      candidate: message.candidate
+      candidate: message.candidate,
+      sdpMLineIndex: message.label,
+      sdpMid: message.id
     }));
-
+    
   }
 }
 
