@@ -220,7 +220,15 @@ if (isInitiator) {
   onDataChannelCreated(dataChannel);
 
   console.log('Creating an offer');
-  peerConn.createOffer(onLocalSessionCreated, logError);
+  peerConn.createOffer().then(function(offer) {
+    return peerConn.setLocalDescription(offer);
+  })
+  .then(() => {
+    console.log('sending local desc:', peerConn.localDescription);
+    sendMessage(peerConn.localDescription);
+  })
+  .catch(logError);
+
 } else {
   peerConn.ondatachannel = function(event) {
     console.log('ondatachannel:', event.channel);
@@ -232,10 +240,10 @@ if (isInitiator) {
 
 function onLocalSessionCreated(desc) {
   console.log('local session created:', desc);
-  peerConn.setLocalDescription(desc, function() {
+  peerConn.setLocalDescription(desc).then(function() {
     console.log('sending local desc:', peerConn.localDescription);
     sendMessage(peerConn.localDescription);
-  }, logError);
+  }).catch(logError);
 }
 
 function onDataChannelCreated(channel) {
